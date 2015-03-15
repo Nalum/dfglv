@@ -5,3 +5,7 @@ type Region struct {
 	Name string `json:"name" xml:"name"`
 	Type string `json:"type" xml:"type"`
 }
+
+type Regions struct {
+	Regions []Region `json:"region" xml:"region"`
+}

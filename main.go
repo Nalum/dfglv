@@ -4,9 +4,9 @@ import (
 	"encoding/xml"
 	"flag"
 	"fmt"
+	"github.com/foobaz/ansi"
 	"github.com/nalum/dfglv/structs"
 	"io/ioutil"
-	"strconv"
 )
 
 var showVersion bool
@@ -31,21 +31,32 @@ func main() {
 
 	var legends structs.Legends
 	legendsRaw, err := ioutil.ReadFile(legendsFile)
+	var legendsBytesProcessed []byte
 
 	if err != nil {
 		panic(err)
 	}
 
-	legendsString := string(legendsRaw)
-	legendsStringConv := strconv.Quote(legendsString)
-	fmt.Println(legendsStringConv[100000:100500])
-	legendsByte := []byte(legendsStringConv)
+	for i := range legendsRaw {
+		if legendsRaw[i] > 127 {
+			for j := range ansi.CP437toUTF8[legendsRaw[i]-128] {
+				legendsBytesProcessed = append(legendsBytesProcessed, ansi.CP437toUTF8[legendsRaw[i]-128][j])
+			}
+		} else {
+			legendsBytesProcessed = append(legendsBytesProcessed, legendsRaw[i])
+		}
+	}
 
-	err = xml.Unmarshal(legendsByte, &legends)
+	err = xml.Unmarshal(legendsBytesProcessed, &legends)
 
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println(legends)
+	fmt.Printf("Artifacts: %v\n", len(legends.Artifacts.Artifacts))
+	fmt.Printf("Entities: %v\n", len(legends.Entities.Entities))
+	fmt.Printf("Entity Populations: %v\n", len(legends.EntityPopulations.EntityPopulations))
+	fmt.Printf("Historical Eras: %v\n", len(legends.HistoricalEras.HistoricalEras))
+	fmt.Printf("Regions: %v\n", len(legends.Regions.Regions))
+	fmt.Printf("Sites: %v\n", len(legends.Sites.Sites))
 }

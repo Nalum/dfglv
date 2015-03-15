@@ -5,3 +5,7 @@ type Artifact struct {
 	Name string `json:"name" xml:"name"`
 	Item string `json:"item" xml:"item"`
 }
+
+type Artifacts struct {
+	Artifacts []Artifact `json:"artifact" xml:"artifact"`
+}
