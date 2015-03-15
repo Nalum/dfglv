@@ -57,6 +57,11 @@ func main() {
 	fmt.Printf("Entities: %v\n", len(legends.Entities.Entities))
 	fmt.Printf("Entity Populations: %v\n", len(legends.EntityPopulations.EntityPopulations))
 	fmt.Printf("Historical Eras: %v\n", len(legends.HistoricalEras.HistoricalEras))
+	fmt.Printf("Historical Event Collections: %v\n", len(legends.HistoricalEventCollections.HistoricalEventCollections))
+	fmt.Printf("Historical Events: %v\n", len(legends.HistoricalEvents.HistoricalEvents))
+	fmt.Printf("Historical Figures: %v\n", len(legends.HistoricalFigures.HistoricalFigures))
 	fmt.Printf("Regions: %v\n", len(legends.Regions.Regions))
 	fmt.Printf("Sites: %v\n", len(legends.Sites.Sites))
+	fmt.Printf("Underground Regions: %v\n", len(legends.UndergroundRegions.UndergroundRegions))
+	fmt.Printf("World Constructions: %v\n", len(legends.WorldConstructions.WorldConstructions))
 }

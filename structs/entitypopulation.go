@@ -5,5 +5,5 @@ type EntityPopulations struct {
 }
 
 type EntityPopulation struct {
-	Id uint64 `json:"id" xml:"id"`
+	Id int64 `json:"id" xml:"id"`
 }

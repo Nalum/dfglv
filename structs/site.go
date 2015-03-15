@@ -5,7 +5,7 @@ type Sites struct {
 }
 
 type Site struct {
-	Id     uint64 `json:"id" xml:"id"`
+	Id     int64  `json:"id" xml:"id"`
 	Type   string `json:"type" xml:"type"`
 	Name   string `json:"name" xml:"name"`
 	CoOrds string `json:"coords" xml:"coords"`

@@ -5,6 +5,6 @@ type Entities struct {
 }
 
 type Entity struct {
-	Id   uint64 `json:"id" xml:"id"`
+	Id   int64  `json:"id" xml:"id"`
 	Name string `json:"name" xml:"name"`
 }
