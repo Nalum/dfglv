@@ -1,5 +1,11 @@
 package structs
 
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+)
+
 type HistoricalFigures struct {
 	HistoricalFigures []HistoricalFigure `json:"historical_figure" xml:"historical_figure"`
 }
@@ -20,4 +26,15 @@ type HistoricalFigure struct {
 type EntityLink struct {
 	LinkType string `json:"link_type" xml:"link_type"`
 	EntityId int64  `json:"entity_id" xml:"entity_id"`
+}
+
+func (h HistoricalFigures) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	data, err := json.Marshal(h)
+
+	if err != nil {
+		panic(err)
+	}
+
+	w.Header().Add("Content-Type", "application/json")
+	fmt.Fprintf(w, "%v", string(data))
 }

@@ -4,15 +4,19 @@ import (
 	"encoding/xml"
 	"flag"
 	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+
 	"github.com/foobaz/ansi"
 	"github.com/nalum/dfglv/structs"
-	"io/ioutil"
 )
 
 var showVersion bool
 var legendsFile string = "/home/nalum/d2/r2/legends/00125/01/01/data.xml"
 var historyFile string = "/home/nalum/d2/r2/history/00125/01/01/data.xml"
 var configFile string
+var legends structs.Legends
 
 func init() {
 	flag.BoolVar(&showVersion, "version", false, "Show the version of varnish-newrelic and check if there is a newer version available.")
@@ -29,7 +33,6 @@ func main() {
 		return
 	}
 
-	var legends structs.Legends
 	legendsRaw, err := ioutil.ReadFile(legendsFile)
 	var legendsBytesProcessed []byte
 
@@ -53,15 +56,34 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Printf("Artifacts: %v\n", len(legends.Artifacts.Artifacts))
-	fmt.Printf("Entities: %v\n", len(legends.Entities.Entities))
-	fmt.Printf("Entity Populations: %v\n", len(legends.EntityPopulations.EntityPopulations))
-	fmt.Printf("Historical Eras: %v\n", len(legends.HistoricalEras.HistoricalEras))
-	fmt.Printf("Historical Event Collections: %v\n", len(legends.HistoricalEventCollections.HistoricalEventCollections))
-	fmt.Printf("Historical Events: %v\n", len(legends.HistoricalEvents.HistoricalEvents))
-	fmt.Printf("Historical Figures: %v\n", len(legends.HistoricalFigures.HistoricalFigures))
-	fmt.Printf("Regions: %v\n", len(legends.Regions.Regions))
-	fmt.Printf("Sites: %v\n", len(legends.Sites.Sites))
-	fmt.Printf("Underground Regions: %v\n", len(legends.UndergroundRegions.UndergroundRegions))
-	fmt.Printf("World Constructions: %v\n", len(legends.WorldConstructions.WorldConstructions))
+	http.HandleFunc("/", root)
+	http.Handle("/artifacts", legends.Artifacts)
+	http.Handle("/entities", legends.Entities)
+	http.Handle("/entity-populations", legends.EntityPopulations)
+	http.Handle("/historical-eras", legends.HistoricalEras)
+	http.Handle("/historical-event-collections", legends.HistoricalEventCollections)
+	http.Handle("/historical-events", legends.HistoricalEvents)
+	http.Handle("/historical-figures", legends.HistoricalFigures)
+	http.Handle("/regions", legends.Regions)
+	http.Handle("/sites", legends.Sites)
+	http.Handle("/underground-regions", legends.UndergroundRegions)
+	http.Handle("/world-constructions", legends.WorldConstructions)
+	http.Handle("/legends", legends)
+	log.Print("Starting HTTP Server on Port 8080")
+	log.Fatal(http.ListenAndServe(":8080", nil))
+}
+
+func root(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Content-Type", "text/html")
+	fmt.Fprintf(w, "Artifacts: <a href=\"/artifacts\">%v</a><br>\n", len(legends.Artifacts.Artifacts))
+	fmt.Fprintf(w, "Entities: <a href=\"/entities\">%v</a><br>\n", len(legends.Entities.Entities))
+	fmt.Fprintf(w, "Entity Populations: <a href=\"/entity-populations\">%v</a><br>\n", len(legends.EntityPopulations.EntityPopulations))
+	fmt.Fprintf(w, "Historical Eras: <a href=\"/historical-eras\">%v</a><br>\n", len(legends.HistoricalEras.HistoricalEras))
+	fmt.Fprintf(w, "Historical Event Collections: <a href=\"/historical-event-collections\">%v</a><br>\n", len(legends.HistoricalEventCollections.HistoricalEventCollections))
+	fmt.Fprintf(w, "Historical Events: <a href=\"/historical-events\">%v</a><br>\n", len(legends.HistoricalEvents.HistoricalEvents))
+	fmt.Fprintf(w, "Historical Figures: <a href=\"/historical-figures\">%v</a><br>\n", len(legends.HistoricalFigures.HistoricalFigures))
+	fmt.Fprintf(w, "Regions: <a href=\"/regions\">%v</a><br>\n", len(legends.Regions.Regions))
+	fmt.Fprintf(w, "Sites: <a href=\"/sites\">%v</a><br>\n", len(legends.Sites.Sites))
+	fmt.Fprintf(w, "Underground Regions: <a href=\"/underground-regions\">%v</a><br>\n", len(legends.UndergroundRegions.UndergroundRegions))
+	fmt.Fprintf(w, "World Constructions: <a href=\"/world-constructions\">%v</a><br>\n", len(legends.WorldConstructions.WorldConstructions))
 }

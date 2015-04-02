@@ -1,5 +1,11 @@
 package structs
 
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+)
+
 type Legends struct {
 	Artifacts                  Artifacts                  `json:"artifacts" xml:"artifacts"`
 	Entities                   Entities                   `json:"entities" xml:"entities"`
@@ -12,4 +18,15 @@ type Legends struct {
 	Sites                      Sites                      `json:"sites" xml:"sites"`
 	UndergroundRegions         UndergroundRegions         `json:"underground_regions" xml:"underground_regions"`
 	WorldConstructions         WorldConstructions         `json:"world_constructions" xml:"world_constructions"`
+}
+
+func (l Legends) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	data, err := json.Marshal(l)
+
+	if err != nil {
+		panic(err)
+	}
+
+	w.Header().Add("Content-Type", "application/json")
+	fmt.Fprintf(w, "%v", string(data))
 }

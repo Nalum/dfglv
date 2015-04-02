@@ -1,5 +1,11 @@
 package structs
 
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+)
+
 type HistoricalEventCollections struct {
 	HistoricalEventCollections []HistoricalEventCollection `json:"historical_event_collection" xml:"historical_event_collection"`
 }
@@ -19,4 +25,15 @@ type HistoricalEventCollection struct {
 	CoOrds         string  `json:"coords" xml:"coords"`
 	DefendingEnid  int     `json:"defending_enid" xml:"defending_enid"`
 	Ordinal        int     `json:"ordinal" xml:"ordinal"`
+}
+
+func (h HistoricalEventCollections) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	data, err := json.Marshal(h)
+
+	if err != nil {
+		panic(err)
+	}
+
+	w.Header().Add("Content-Type", "application/json")
+	fmt.Fprintf(w, "%v", string(data))
 }
