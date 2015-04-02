@@ -13,23 +13,27 @@ import (
 )
 
 var showVersion bool
+var httpPort int
 var legendsFile string = "/home/nalum/d2/r2/legends/00125/01/01/data.xml"
 var historyFile string = "/home/nalum/d2/r2/history/00125/01/01/data.xml"
-var configFile string
 var legends structs.Legends
 
 func init() {
 	flag.BoolVar(&showVersion, "version", false, "Show the version of varnish-newrelic and check if there is a newer version available.")
-	flag.StringVar(&legendsFile, "legends", legendsFile, "Set the location of the config file.")
-	flag.StringVar(&historyFile, "history", historyFile, "Set the location of the config file.")
-	flag.StringVar(&configFile, "config", configFile, "Set the location of the config file.")
+	flag.BoolVar(&showVersion, "v", false, "Show the version of dfglv and check if there is a new version available.")
+	flag.IntVar(&httpPort, "port", 8080, "This is the http port to use.")
+	flag.IntVar(&httpPort, "p", 8080, "This is the http port to use.")
 }
 
 func main() {
 	flag.Parse()
 
 	if showVersion {
-		fmt.Println("Version: 0.1.0")
+		fmt.Println("Dwarf Fortress GO Legends View")
+		fmt.Println("Version         : 0.1.0")
+		fmt.Println("Source          : github.com/nalum/dfglv")
+		fmt.Println("Author          : Luke Mallon <nalum@lukemallon.com>")
+		fmt.Println("Current Release : 0.1.0") // TODO: check the current release
 		return
 	}
 
@@ -69,8 +73,8 @@ func main() {
 	http.Handle("/underground-regions", legends.UndergroundRegions)
 	http.Handle("/world-constructions", legends.WorldConstructions)
 	http.Handle("/legends", legends)
-	log.Print("Starting HTTP Server on Port 8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Printf("Starting HTTP Server on Port %v", httpPort)
+	log.Fatal(http.ListenAndServe(fmt.Sprint(":", httpPort), nil))
 }
 
 func root(w http.ResponseWriter, r *http.Request) {

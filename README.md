@@ -4,3 +4,38 @@ This is a small application that allows you to view the exported legends from Dw
 
 To use this please download the latest release or you can compile it yourself using Go. I will be focusing on Linux builds of the app but it should also work fine on other systems supported by Go.
 
+# How to
+
+To use run the following command:
+```
+$ dfglv
+```
+
+This should output something like the following:
+```
+2015/04/02 16:12:19 Starting HTTP Server on Port 8080
+```
+
+If you have other applications using port `8080` you can change to another port as follows:
+```
+$ dfglv -p 9999
+```
+
+Which should result in something as follows:
+```
+2015/04/02 16:25:49 Starting HTTP Server on Port 9999
+```
+
+You can also run the following to check which version of the app you are running:
+```
+$ dfglv -v
+```
+
+Which should output something like the following:
+```
+Dwarf Fortress GO Legends View
+Version         : 0.1.0
+Source          : github.com/nalum/dfglv
+Author          : Luke Mallon <nalum@lukemallon.com>
+Current Release : 0.1.0
+```
