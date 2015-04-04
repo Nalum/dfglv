@@ -4,6 +4,9 @@ This is a small application that allows you to view the exported legends from Dw
 
 To use this please download the latest release or you can compile it yourself using Go. I will be focusing on Linux builds of the app but it should also work fine on other systems supported by Go.
 
+[![GPL License](http://img.shields.io/badge/license-GPL-blue.svg?style=flat-square)](http://opensource.org/licenses/GPL-3.0)
+[![GitHub Release](https://img.shields.io/github/release/Nalum/dfglv.svg?style=flat-square)](https://github.com/Nalum/dfglv/releases)
+
 # How to
 
 To use run the following command:
