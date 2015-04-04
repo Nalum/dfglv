@@ -3,7 +3,10 @@ package structs
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+	"strconv"
+	"strings"
 )
 
 type HistoricalEras struct {
@@ -16,7 +19,21 @@ type HistoricalEra struct {
 }
 
 func (h HistoricalEras) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	data, err := json.Marshal(h)
+	path := r.URL.Path
+	var data []byte
+	var err error
+
+	if path[strings.LastIndex(path, "/"):] == "/" {
+		data, err = json.Marshal(h.HistoricalEras)
+	} else {
+		index, err := strconv.ParseInt(path[strings.LastIndex(path, "/")+1:], 10, 64)
+
+		if err != nil {
+			panic(err)
+		}
+
+		data, err = json.Marshal(h.HistoricalEras[index])
+	}
 
 	if err != nil {
 		panic(err)
@@ -24,4 +41,5 @@ func (h HistoricalEras) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Add("Content-Type", "application/json")
 	fmt.Fprintf(w, "%v", string(data))
+	log.Println(r.URL)
 }
